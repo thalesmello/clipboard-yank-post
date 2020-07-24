@@ -2,6 +2,10 @@ augroup ClipboardYankPost
     function! s:clipboard_yank_post_return()
         let @+ = @"
         echo "Register copied to clipboard!"
+        call s:clipboard_yank_post_deregister()
+    endfunction
+
+    function! s:clipboard_yank_post_deregister()
         nunmap <buffer><cr>
         autocmd! ClipboardYankPostReturn
     endfunction
@@ -14,7 +18,7 @@ augroup ClipboardYankPost
         augroup ClipboardYankPostReturn
             autocmd!
             nnoremap <buffer><cr> :<c-u>call <SID>clipboard_yank_post_return()<cr>
-            autocmd CursorMoved * autocmd! ClipboardYankPostReturn
+            autocmd CursorMoved * call s:clipboard_yank_post_deregister()
         augroup end
     endfunction
 
